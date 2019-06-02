@@ -1,0 +1,71 @@
+Sub open_delay_sheet()
+Dim ws As Worksheet
+    With ThisWorkbook
+        Set ws = .Sheets.Add(After:=.Sheets(.Sheets.Count))
+        ws.Name = "Send_delay"
+    End With
+    
+    Dim btn As Button
+  Application.ScreenUpdating = False
+  ActiveSheet.Buttons.Delete
+  Dim t As Range
+  
+    Set t = ActiveSheet.Range(Cells(1, 3), Cells(1, 3))
+    Set btn = ActiveSheet.Buttons.Add(t.Left, t.Top, t.Width, t.Height)
+    With btn
+      .OnAction = "inputer"
+      .Caption = "Inputer "
+      .Name = "Start_input"
+    End With
+    Set t = ActiveSheet.Range(Cells(1, 5), Cells(1, 5))
+    Set btn = ActiveSheet.Buttons.Add(t.Left, t.Top, t.Width, t.Height)
+    With btn
+      .OnAction = "delete_sheet"
+      .Caption = "Close "
+      .Name = "Close_sheet"
+    End With
+    
+     With ActiveSheet.Columns(1)
+     .ColumnWidth = .ColumnWidth * 7
+     .Interior.ColorIndex = 15
+    End With
+    With ActiveSheet.Rows(1)
+     .RowHeight = .RowHeight * 2
+     .Interior.ColorIndex = 17
+    End With
+   
+    
+    
+    ''fill in dummy data
+    Cells(2, 1) = "Subject: Piramis Vards kuruu vajag aizstat / Datums " & Chr(10) & "Text: Sheit vajag aizstat Daudzums / Reference un sutitals"
+    Cells(2, 2) = "Vards"
+    Cells(2, 3) = "Uzvards"
+    Cells(2, 4) = "Reference"
+    
+  Application.ScreenUpdating = True
+        
+End Sub
+Sub inputer()
+
+ThisWorkbook.Sheets("Sheet1").Select
+countRows = Application.WorksheetFunction.CountA(ThisWorkbook.Sheets("Sheet1").Columns(2))
+Debug.Print (countRows)
+countColumns = Application.WorksheetFunction.CountA(ThisWorkbook.Sheets("Sheet1").Rows(2))
+Debug.Print (countColumns)
+For g = 1 + 2 To countRows + 1
+    forma = Cells(2, 1).Value
+    For i = 2 To countColumns - 1
+        forma = Replace(forma, Cells(2, i), Cells(g, i))
+    Next i
+    Debug.Print (forma)
+    Cells(g, 1) = forma
+Next g
+
+End Sub
+Sub delete_sheet()
+
+ Application.DisplayAlerts = False
+ ActiveSheet.Delete
+ Application.DisplayAlerts = True
+
+End Sub
